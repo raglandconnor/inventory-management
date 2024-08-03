@@ -9,12 +9,12 @@ export function MainNav({ className, ...props }) {
       {...props}
     >
       <Link
-        href="/examples/dashboard"
+        href="/"
         className="text-sm font-medium transition-colors hover:text-primary"
       >
         Overview
       </Link>
-      <Link
+      {/* <Link
         href="/examples/dashboard"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
@@ -31,7 +31,7 @@ export function MainNav({ className, ...props }) {
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
         Settings
-      </Link>
+      </Link> */}
     </nav>
   );
 }
