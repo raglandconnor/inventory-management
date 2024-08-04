@@ -26,6 +26,7 @@ import {
 import { firestore } from '@/firebase';
 import InventoryListItem from './components/inventory-list-item';
 import { Input } from '@/components/ui/input';
+import { CameraIcon } from '@radix-ui/react-icons';
 
 export default function DashboardPage() {
   const [inventory, setInventory] = useState([]);
@@ -170,10 +171,13 @@ export default function DashboardPage() {
                 <div className="lg:col-start-2 col-span-2">
                   <h3 className="text-lg font-bold mb-2 mt-2">Add Items</h3>
                   <div className="flex flex-row justify-center gap-2">
+                    <Button variant="outline">
+                      <CameraIcon className="scale-125" />
+                    </Button>
                     <div className="grid gap-2 w-full">
                       <Input
                         value={itemName}
-                        placeholder="Item Name"
+                        placeholder="Item name"
                         onChange={(e) => {
                           setItemName(e.target.value);
                         }}
