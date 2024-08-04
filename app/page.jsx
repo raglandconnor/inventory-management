@@ -26,7 +26,7 @@ import {
 import { firestore } from '@/firebase';
 import InventoryListItem from './components/inventory-list-item';
 import { Input } from '@/components/ui/input';
-import { CameraIcon } from '@radix-ui/react-icons';
+import { CameraIcon, ResetIcon } from '@radix-ui/react-icons';
 import { set } from 'date-fns';
 
 export default function DashboardPage() {
@@ -254,6 +254,16 @@ export default function DashboardPage() {
                   >
                     Search
                   </Button>
+                  {searchInventory !== inventory && (
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setSearchInventory(inventory);
+                      }}
+                    >
+                      <ResetIcon className="scale-125" />
+                    </Button>
+                  )}
                 </div>
               </div>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-8">
