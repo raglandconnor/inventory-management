@@ -27,12 +27,15 @@ import { firestore } from '@/firebase';
 import InventoryListItem from './components/inventory-list-item';
 import { Input } from '@/components/ui/input';
 import { CameraIcon } from '@radix-ui/react-icons';
+import { set } from 'date-fns';
 
 export default function DashboardPage() {
   const [inventory, setInventory] = useState([]);
   const [itemName, setItemName] = useState('');
   const [totalItems, setTotalItems] = useState(0);
   const [uniqueItems, setUniqueItems] = useState(0);
+  const [search, setSearch] = useState('');
+  const [searchInventory, setSearchInventory] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const updateInventory = async () => {
@@ -49,8 +52,24 @@ export default function DashboardPage() {
     });
 
     setInventory(inventoryList);
+    setSearchInventory(inventoryList);
     setIsLoading(false);
   };
+
+  const updateSearchInventory = (searchQuery) => {
+    setIsLoading(true);
+    setSearchInventory([]);
+    inventory.forEach((item) => {
+      if (item.name.includes(searchQuery.toLowerCase())) {
+        setSearchInventory((prev) => [...prev, item]);
+      }
+    });
+    setIsLoading(false);
+  };
+
+  // const clearSearchInventory = () => {
+  //   setSearchInventory(inventory);
+  // };
 
   const removeItem = async (item) => {
     const docRef = doc(collection(firestore, 'inventory'), item);
@@ -71,6 +90,7 @@ export default function DashboardPage() {
   };
 
   const addItem = async (item) => {
+    item = item.toLowerCase();
     const docRef = doc(collection(firestore, 'inventory'), item);
     const docSnap = await getDoc(docRef);
 
@@ -225,8 +245,15 @@ export default function DashboardPage() {
             <TabsContent value="search" className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-8">
                 <div className="lg:col-start-3 col-span-4 flex flex-row gap-2">
-                  <Search />
-                  <Button>Search</Button>
+                  <Search searchQuery={search} setSearchQuery={setSearch} />
+                  <Button
+                    onClick={() => {
+                      updateSearchInventory(search);
+                      setSearch('');
+                    }}
+                  >
+                    Search
+                  </Button>
                 </div>
               </div>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-8">
@@ -239,7 +266,7 @@ export default function DashboardPage() {
                       {isLoading ? (
                         <div className="animate-spin h-6 w-6 border-4 border-t-transparent rounded-full mx-auto"></div>
                       ) : (
-                        inventory.map(({ name, quantity, id }) => {
+                        searchInventory.map(({ name, quantity, id }) => {
                           return (
                             <InventoryListItem
                               key={id}
